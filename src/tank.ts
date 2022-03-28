@@ -3,6 +3,10 @@ import { Game }             from "./game.js";
 import { GameObject }       from "./gameobject.js";
 import { Turret }           from "./turret.js";
 import { Vector }           from "./vector.js";
+import { AmmoType } from "./ammo/ammotype.js"
+import { Projectile } from "./projectiles/projectile.js";
+import { BulletAmmo } from "./ammo/bulletammo.js";
+
 
 export class Tank extends GameObject{
     private readonly FRICTION       : number    = 0.3  
@@ -17,6 +21,7 @@ export class Tank extends GameObject{
     private rotationSpeed   : number    = 2
     private turret          : Turret
     private game            : Game
+    public ammoType         : AmmoType
     
     protected speed         : Vector    = new Vector(0, 0)
 
@@ -35,6 +40,7 @@ export class Tank extends GameObject{
         this.rotation   = 0
         
         this.turret = new Turret(this)
+        this.ammoType = new BulletAmmo(this.position);
 
         window.addEventListener("keydown",  (e : KeyboardEvent) => this.handleKeyDown(e))
         window.addEventListener("keyup",    (e : KeyboardEvent) => this.handleKeyUp(e))
@@ -90,13 +96,20 @@ export class Tank extends GameObject{
 
         if(e.key == " ")  {
             this.canFire = false
-            this.previousState = false
         }    
     }
 
+    public setAmmoType(ammo:AmmoType) {
+        this.ammoType = ammo;
+    }
+
     private fire() {
-        this.game.gameObjects.push(new Bullet(this))
+        let projectile = this.ammoType.changeAmmo(this)
+        this.game.gameObjects.push(projectile)
         console.log("fire")
+        setTimeout(() => {
+            this.previousState = false
+        }, projectile.fireRate)
     }
 
     onCollision(target: GameObject): void {
