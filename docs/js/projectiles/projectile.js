@@ -5,7 +5,6 @@ export class Projectile extends GameObject {
         super(type);
         this.damage = 15;
         this.speed = 10;
-        this.fireRate = 1000;
         this.parentTurret = tank.Turret;
         this.position = this.parentTurret.Position;
         this.rotation = this.parentTurret.Rotation;

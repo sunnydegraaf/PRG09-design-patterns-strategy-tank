@@ -10,7 +10,7 @@ export abstract class Projectile extends GameObject{
     private speed        : number = 10
     private parentTurret : Turret
     private direction    : Vector;
-    public fireRate : number = 1000 // in milliseconds
+    public fireRate : number // in milliseconds
 
     // Properties
     public get Damage()         : number        { return this.damage }
